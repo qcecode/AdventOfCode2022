@@ -1,31 +1,115 @@
 ﻿using System.Data;
+using System.Diagnostics;
 using System.Dynamic;
 
+Day08 day08 = new Day08();
+day08.Part01and02();
 
-
-var inputFile = File.ReadLines("C:\\Users\\User\\source\\repos\\AdventOfCode2022\\day08\\input08.txt");
-var input = new List<string>(inputFile);
-
-int rows = input.Count, cols = input[0].Length;
-
-int[,] PlantForest(List<String> inputList)
+public class Day08
 {
-    var forest = new int[rows,cols];
-    for (int i = 0; i < rows; i++)
+    public void Part01and02()
     {
-        for (int k = 0; k < cols; k++)
+        var input = File.ReadAllLines("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day08\\input08.txt");
+
+        int visibleTrees = 0;
+        int highestScenicScore = 0;
+        for (int row = 0; row < input.Count(); row++)
         {
-            forest[i,k] = int.Parse(inputList[i][k].ToString());
+            string treeLine = input.ElementAt(row);
+            for (int column = 0; column < treeLine.Count(); column++)
+            {
+                Tuple<bool, int> tuple = GetVisibilityAndScenicScore(input, row, column);
+                bool isVisible = tuple.Item1;
+                if (isVisible)
+                {
+                    visibleTrees++;
+                }
+                highestScenicScore = Math.Max(highestScenicScore, tuple.Item2);
+            }
         }
+        Console.WriteLine($"Visible trees: {visibleTrees} | Highest scenic score: {highestScenicScore}");
     }
-    return forest;
+
+    internal Tuple<bool, int> GetVisibilityAndScenicScore(string[] treePatch, int x, int y)
+    {
+        int patchWidth = treePatch.ElementAt(0).Count();
+        int patchLength = treePatch.Count();
+
+        bool isVisible = false;
+        bool isLineClear = true;
+        int score = 1;
+        int clearLineLength = 0;
+
+        //corners
+        if (x == 0 || y == 0 || (x == patchLength - 1) || (y == patchWidth - 1))
+        {
+            isVisible = true;
+            return new Tuple<bool, int>(isVisible, score);
+        }
+
+        //upwards
+        for (int row = x - 1; row >= 0; row--)
+        {
+            clearLineLength++;
+            if (treePatch.ElementAt(row).ElementAt(y) >= treePatch.ElementAt(x).ElementAt(y))
+            {
+                isLineClear = false;
+                break;
+            }
+        }
+
+        isVisible = isVisible || isLineClear;
+        isLineClear = true;
+        score *= clearLineLength;
+        clearLineLength = 0;
+
+        //downwards
+        for (int row = x + 1; row < patchLength; row++)
+        {
+            clearLineLength++;
+            if (treePatch.ElementAt(row).ElementAt(y) >= treePatch.ElementAt(x).ElementAt(y))
+            {
+                isLineClear = false;
+                break;
+            }
+        }
+
+        isVisible = isVisible || isLineClear;
+        isLineClear = true;
+        score *= clearLineLength;
+        clearLineLength = 0;
+
+        //right
+        for (int column = y + 1; column < patchWidth; column++)
+        {
+            clearLineLength++;
+            if (treePatch.ElementAt(x).ElementAt(column) >= treePatch.ElementAt(x).ElementAt(y))
+            {
+                isLineClear = false;
+                break;
+            }
+        }
+
+        isVisible = isVisible || isLineClear;
+        isLineClear = true;
+        score *= clearLineLength;
+        clearLineLength = 0;
+
+        //left
+        for (int column = y - 1; column >= 0; column--)
+        {
+            clearLineLength++;
+            if (treePatch.ElementAt(x).ElementAt(column) >= treePatch.ElementAt(x).ElementAt(y))
+            {
+                isLineClear = false;
+                break;
+            }
+        }
+
+        isVisible = isVisible || isLineClear;
+        score *= clearLineLength;
+
+        return new Tuple<bool, int>(isVisible, score);
+    }
 }
 
-
-
-PlantForest(input);
-Direction Left = new Direction(0, -1);
-Direction Right = new Direction(0, 1);
-Direction Up = new Direction(-1, 0);
-Direction Down = new Direction(1, 0);
-record Direction(int dRow, int dCol);
