@@ -2,14 +2,13 @@
 using System.Diagnostics;
 using System.Net.Security;
 
-Run(@"C:\Users\qcec\source\repos\AdventOfCode2022\day23\example23.txt", true);
-Run(@"C:\Users\qcec\source\repos\AdventOfCode2022\day23\input23.txt", false);
+Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day23\\example23.txt", true);
+Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day23\\input23.txt", false);
 
 void Run(string inputfile, bool isTest)
 {
-    Stopwatch stopwatch = Stopwatch.StartNew();
     long supposedanswer1 = 110;
-    long supposedanswer2 = 000;
+    long supposedanswer2 = 20;
 
     var S = File.ReadAllLines(inputfile).ToList();
     long answer1 = 0;
@@ -90,9 +89,6 @@ void Run(string inputfile, bool isTest)
     }
     answer2 = k;
 
-    stopwatch.Stop();
-    Console.WriteLine($"Used time (ms): {stopwatch.ElapsedMilliseconds}");
-    Console.WriteLine($"Used time (ticks): {stopwatch.ElapsedTicks}");
     w(1, answer1, supposedanswer1, isTest);
     w(2, answer2, supposedanswer2, isTest);
 }

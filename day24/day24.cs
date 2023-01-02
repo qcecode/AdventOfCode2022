@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.Net.Security;
 using System.Runtime.InteropServices;
 
-Run(@"C:\Users\qcec\source\repos\AdventOfCode2022\day24\input24.txt", true);
-Run(@"C:\Users\qcec\source\repos\AdventOfCode2022\day24\input24.txt", false);
+Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day24\\example24.txt", true);
+Console.Clear();
+Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day24\\input24.txt", false);
 
 void Run(string inputfile, bool isTest)
 {
-    Stopwatch stopwatch = Stopwatch.StartNew();
     int supposedanswer1 = 18;
     int supposedanswer2 = 54;
 
@@ -21,8 +21,12 @@ void Run(string inputfile, bool isTest)
 
     var numstates = yCnt * xCnt;
     for (int x = 1; x <= xCnt; x++)
+    {
         for (int y = 1; y <= yCnt; y++)
+        {
             if (x * yCnt == y * xCnt && y * xCnt < numstates) numstates = y * xCnt;
+        }
+    }
 
     var isFree = new bool[yCnt, xCnt, numstates];
 
@@ -118,12 +122,8 @@ void Run(string inputfile, bool isTest)
     path = FindPath(ref answer2, xCnt, yCnt, numstates, isFree, startX, endX, startY, endY, shortest, work, visited, ref firstpos, ref l);
     fields = PrintPath(S, answer2, xCnt, yCnt, fields, i, path);
 
-    stopwatch.Stop();
     Console.SetCursorPosition(0, 1 + yCnt + 2);
 
-
-    Console.WriteLine($"Used time (ms): {stopwatch.ElapsedMilliseconds}");
-    Console.WriteLine($"Used time (ticks): {stopwatch.ElapsedTicks}");
     w(1, answer1, supposedanswer1, isTest);
     w(2, answer2, supposedanswer2, isTest);
 
@@ -138,7 +138,6 @@ void Run(string inputfile, bool isTest)
         {
             work.Add(cNew);
             shortest[cNew.y, cNew.x, cNew.state] = nextCost;
-
         }
     }
 
@@ -203,9 +202,7 @@ void Run(string inputfile, bool isTest)
                 cNew = (cw.y, cw.x - 1, nextstate, l.ToArray());
                 CheckCell(isFree, shortest, visited, work, nextCost, cNew);
             }
-
         }
-
         return path;
     }
 }
@@ -223,9 +220,7 @@ static void w<T>(int number, T val, T supposedval, bool isTest)
     if (isTest)
     {
         Console.Write(" ... supposed (example) answer: ");
-        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine(sv);
-        Console.ForegroundColor = previouscolour;
     }
     else
         Console.WriteLine();
@@ -261,7 +256,6 @@ static byte[,] PrintPath(List<string> S, int answer1, int xCnt, int yCnt, byte[,
         {
             for (int x = 0; x < xCnt; x++)
             {
-
                 if ((fields[y, x] & 1) == 1)
                 {
                     int newY = y - 1;
@@ -334,7 +328,6 @@ static byte[,] PrintPath(List<string> S, int answer1, int xCnt, int yCnt, byte[,
         fields = newfields;
         Thread.Sleep(20);
     }
-
     return fields;
 }
 
