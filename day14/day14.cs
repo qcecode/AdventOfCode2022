@@ -6,31 +6,25 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
+const int START_X = 500;
+const int START_Y = 0;
+const int BUFFER = 1000;
 
-var input = File.ReadAllLines("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day14\\input14.txt")
+var lines = File.ReadAllLines("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day14\\input14.txt")
     .Select(line => line.Split(" -> ")
         .Select(point => point.Split(',')
             .Select(int.Parse).ToArray())
     .Select(point => (X: point[0], Y: point[1])).ToArray()).ToArray();
 
-var walls = new HashSet<(int X,int Y)> ();
-var sand = new HashSet<(int X,int Y)> ();
+var walls = new HashSet<(int X, int Y)>();
+var sand = new HashSet<(int X, int Y)>();
 
-foreach (var line in input)
+foreach (var currentLine in lines)
 {
-    for(int i = 1; i < line.Length; i++)
+    var wallBricks = GetWallBricks(currentLine[0], currentLine[1]);
+    foreach (var wallBrick in wallBricks)
     {
-        var wall =  from X in Enumerable.Range(
-                        Math.Min(line[i].X, line[i - 1].X),
-                        Math.Abs(line[i].X - line[i - 1].X) + 1)
-                    from Y in Enumerable.Range(
-                        Math.Min(line[i].Y, line[i - 1].Y),
-                        Math.Abs(line[i].Y - line[i - 1].Y) + 1)
-                    select  (X, Y);
-        foreach (var brick in wall)
-        {
-            walls.Add(brick);
-        }
+        walls.Add(wallBrick);
     }
 }
 
@@ -41,9 +35,9 @@ int minY = walls.Min(y => y.Y);
 int maxY = walls.Max(y => y.Y);
 
 // add base line Part2        
-for (int k = minX-1000; k <= maxX+1000; k++)
+for (int x = minX - BUFFER; x <= maxX + BUFFER; x++)
 {
-    var lUnit = (X: k, Y: maxY+2);
+    var lUnit = (X: x, Y: maxY + 2);
     walls.Add(lUnit);
 }
 
@@ -74,30 +68,42 @@ for (int i = minY; i <= maxY; i++)
 */
 
 
-var unit = (X: 500, Y: 0);
+var unit = (X: START_X, Y: START_Y);
 
-while (!sand.Contains((500, 0)) && unit.Y < maxY)
+while (!sand.Contains((START_X, START_Y)) && unit.Y < maxY)
 {
-    if(!walls.Contains((unit.X, unit.Y + 1 )) && !sand.Contains((unit.X, unit.Y + 1)))
+    (int X, int Y) nextUnit;
+    if (!walls.Contains((unit.X, unit.Y + 1)) && !sand.Contains((unit.X, unit.Y + 1)))
     {
-        unit = (unit.X, unit.Y + 1);
+        nextUnit = (unit.X, unit.Y + 1);
     }
-
     else if (!walls.Contains((unit.X - 1, unit.Y + 1)) && !sand.Contains((unit.X - 1, unit.Y + 1)))
     {
-        unit = (unit.X - 1, unit.Y + 1);
+        nextUnit = (unit.X - 1, unit.Y + 1);
     }
-
     else if (!walls.Contains((unit.X + 1, unit.Y + 1)) && !sand.Contains((unit.X + 1, unit.Y + 1)))
     {
-        unit = (unit.X + 1, unit.Y + 1);
+        nextUnit = (unit.X + 1, unit.Y + 1);
     }
     else
     {
         sand.Add(unit);
-        unit = (X: 500, Y: 0);
+        unit = (X: START_X, Y: START_Y);
+        continue;
     }
 
+    unit = nextUnit;
 }
 
 Console.WriteLine(sand.Count);
+
+IEnumerable<(int X, int Y)> GetWallBricks((int X, int Y) start, (int X, int Y) end)
+{
+    for (int x = Math.Min(start.X, end.X); x <= Math.Max(start.X, end.X); x++)
+    {
+        for (int y = Math.Min(start.Y, end.Y); y <= Math.Max(start.Y, end.Y); y++)
+        {
+            yield return (x, y);
+        }
+    }
+}

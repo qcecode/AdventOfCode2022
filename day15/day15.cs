@@ -5,20 +5,6 @@ Day15.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day15\\in
 Day15.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day15\\example15.txt");
 public class Day15
 {
-    private static int Distance((int x, int y) p1, (int x, int y) p2)
-    {
-        return Math.Abs(p1.x - p2.x) + Math.Abs(p1.y - p2.y);
-    }
-
-    private static bool IsPointInCircle((int x, int y) point, (int cx, int cy, int r) circle)
-    {
-        if (Distance(point, (circle.cx, circle.cy)) <= circle.r)
-        {
-            return true;
-        }
-        return false;
-    }
-
     public static void Run(string filePath)
     {
         HashSet<(int x, int y)> sensors = new();
@@ -106,5 +92,18 @@ public class Day15
                 return;
             }
         }
+    }
+        private static int Distance((int x, int y) p1, (int x, int y) p2)
+    {
+        return Math.Abs(p1.x - p2.x) + Math.Abs(p1.y - p2.y);
+    }
+
+    private static bool IsPointInCircle((int x, int y) point, (int cx, int cy, int r) circle)
+    {
+        if (Distance(point, (circle.cx, circle.cy)) <= circle.r)
+        {
+            return true;
+        }
+        return false;
     }
 }

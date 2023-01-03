@@ -19,21 +19,16 @@ public class Node
         XPos = x;
         YPos = y;
         Elevation = elev;
+        Parent = null;
     }
-
-    public void SetParent(Node parent)
-    {
-        Parent = parent;
-    }
-
 }
 
 public static class Day12
 {
     static string[] input = File.ReadAllLines("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day12\\input12.txt");
     static Node[,] map;
-    static int xSize = input[0].Length;
-    static int ySize = input.Length;
+    static int MAP_WIDTH = input[0].Length;
+    static int MAP_HEIGHT = input.Length;
     static int[,] mapCoords;
 
     static int[] startingLocation = new int[2];
@@ -104,53 +99,59 @@ public static class Day12
         while (nodesToVisit.Count > 0 || !visited.Contains(map[destination[0], destination[1]]))
         {
             // Check adjacent nodes
-            int[] loc = new int[] { nodesToVisit.First().XPos, nodesToVisit.First().YPos };
+            Node currentNode = nodesToVisit.Dequeue();
+            int[] loc = new int[] { currentNode.XPos, currentNode.YPos };
+
             // Up
             if (loc[1] - 1 >= 0)
             {
-                if (!nodesToVisit.Contains(map[loc[0], loc[1] - 1]) && !visited.Contains(map[loc[0], loc[1] - 1]) && (map[loc[0], loc[1] - 1].Elevation - nodesToVisit.First().Elevation) <= 1)
+                Node upNode = map[loc[0], loc[1] - 1];
+                if (!nodesToVisit.Contains(upNode) && !visited.Contains(upNode) && (upNode.Elevation - currentNode.Elevation) <= 1)
                 {
-                    map[loc[0], loc[1] - 1].Parent = nodesToVisit.First();
-                    nodesToVisit.Enqueue(map[loc[0], loc[1] - 1]);
+                    upNode.Parent = currentNode;
+                    nodesToVisit.Enqueue(upNode);
                 }
             }
             // Down
-            if (loc[1] + 1 < ySize)
+            if (loc[1] + 1 < MAP_HEIGHT)
             {
-                if (!nodesToVisit.Contains(map[loc[0], loc[1] + 1]) && !visited.Contains(map[loc[0], loc[1] + 1]) && (map[loc[0], loc[1] + 1].Elevation - nodesToVisit.First().Elevation) <= 1)
+                Node downNode = map[loc[0], loc[1] + 1];
+                if (!nodesToVisit.Contains(downNode) && !visited.Contains(downNode) && (downNode.Elevation - currentNode.Elevation) <= 1)
                 {
-                    map[loc[0], loc[1] + 1].Parent = nodesToVisit.First();
-                    nodesToVisit.Enqueue(map[loc[0], loc[1] + 1]);
+                    downNode.Parent = currentNode;
+                    nodesToVisit.Enqueue(downNode);
                 }
             }
             // Left
             if (loc[0] - 1 >= 0)
             {
-                if (!nodesToVisit.Contains(map[loc[0] - 1, loc[1]]) && !visited.Contains(map[loc[0] - 1, loc[1]]) && (map[loc[0] - 1, loc[1]].Elevation - nodesToVisit.First().Elevation) <= 1)
+                Node leftNode = map[loc[0] - 1, loc[1]];
+                if (!nodesToVisit.Contains(leftNode) && !visited.Contains(leftNode) && (leftNode.Elevation - currentNode.Elevation) <= 1)
                 {
-                    map[loc[0] - 1, loc[1]].Parent = nodesToVisit.First();
-                    nodesToVisit.Enqueue(map[loc[0] - 1, loc[1]]);
+                    leftNode.Parent = currentNode;
+                    nodesToVisit.Enqueue(leftNode);
                 }
             }
             // Right
-            if (loc[0] + 1 < xSize)
+            if (loc[0] + 1 < MAP_WIDTH)
             {
-                if (!nodesToVisit.Contains(map[loc[0] + 1, loc[1]]) && !visited.Contains(map[loc[0] + 1, loc[1]]) && (map[loc[0] + 1, loc[1]].Elevation - nodesToVisit.First().Elevation) <= 1)
+                Node rightNode = map[loc[0] + 1, loc[1]];
+                if (!nodesToVisit.Contains(rightNode) && !visited.Contains(rightNode) && (rightNode.Elevation - currentNode.Elevation) <= 1)
                 {
-                    map[loc[0] + 1, loc[1]].Parent = nodesToVisit.First();
-                    nodesToVisit.Enqueue(map[loc[0] + 1, loc[1]]);
+                    rightNode.Parent = currentNode;
+                    nodesToVisit.Enqueue(rightNode);
                 }
             }
-            visited.Enqueue(nodesToVisit.Dequeue());
+            visited.Enqueue(currentNode);
         }
     }
 
     private static void ParseInput()
     {
-        map = new Node[xSize, ySize];
-        for (int y = 0; y < ySize; y++)
+        map = new Node[MAP_WIDTH, MAP_HEIGHT];
+        for (int y = 0; y < MAP_HEIGHT; y++)
         {
-            for (int x = 0; x < xSize; x++)
+            for (int x = 0; x < MAP_WIDTH; x++)
             {
                 map[x, y] = new Node(x, y, input[y][x]);
                 if (input[y][x] == 'E')
@@ -158,7 +159,7 @@ public static class Day12
                     destination = new int[] { x, y };
                     map[x, y].Elevation = 'z';
                 }
-                if (input[y][x] == 'S')
+                else if (input[y][x] == 'S')
                 {
                     startingLocation = new int[] { x, y };
                     map[x, y].Elevation = 'a';
@@ -166,7 +167,8 @@ public static class Day12
             }
         }
 
-        nodesToVisit.Enqueue(map[startingLocation[0], startingLocation[1]]);
-        nodesToVisit.First().Parent = null;
+        Node startingNode = map[startingLocation[0], startingLocation[1]];
+        nodesToVisit.Enqueue(startingNode);
+        startingNode.Parent = null;
     }
 }

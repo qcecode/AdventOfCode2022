@@ -73,29 +73,11 @@ public static class Day10
             {
                 monkey.InspectCnt++;
                 long newItem = monkey.Items.Dequeue();
-                if (monkey.Operation.Contains("+"))
-                {
-                    newItem += long.Parse(monkey.Operation[1..]);
-                }
-                else if (monkey.Operation.Contains("old"))
-                {
-                    newItem *= newItem;
-                }
-                else
-                {
-                    newItem *= long.Parse(monkey.Operation[1..]);
-                }
+                newItem = ProcessItem(monkey, newItem);
 
                 newItem = newItem / 3;
 
-                if (newItem % monkey.DivBy == 0)
-                {
-                    monkeys[monkey.IfTrueTarget].Items.Enqueue(newItem);
-                }
-                else
-                {
-                    monkeys[monkey.IfFalseTarget].Items.Enqueue(newItem);
-                }
+                EnqueueItem(monkey, newItem);
             }
         }
     }
@@ -108,33 +90,41 @@ public static class Day10
             {
                 monkey.InspectCnt++;
                 long newItem = monkey.Items.Dequeue();
-                if (monkey.Operation.Contains("+"))
-                {
-                    newItem += long.Parse(monkey.Operation[1..]);
-                    newItem %= lcm;
-                }
-                else if (monkey.Operation.Contains("old"))
-                {
-                    newItem *= newItem;
-                    newItem %= lcm;
-                }
-                else
-                {
-                    newItem *= long.Parse(monkey.Operation[1..]);
-                    newItem %= lcm;
-                }
+                newItem = ProcessItem(monkey, newItem);
 
-                //newItem = newItem / 3;
+                newItem %= lcm;
 
-                if (newItem % monkey.DivBy == 0)
-                {
-                    monkeys[monkey.IfTrueTarget].Items.Enqueue(newItem);
-                }
-                else
-                {
-                    monkeys[monkey.IfFalseTarget].Items.Enqueue(newItem);
-                }
+                EnqueueItem(monkey, newItem);
             }
+        }
+    }
+
+    private static long ProcessItem(Monkey monkey, long item)
+    {
+        if (monkey.Operation.Contains("+"))
+        {
+            item += long.Parse(monkey.Operation[1..]);
+        }
+        else if (monkey.Operation.Contains("old"))
+        {
+            item *= item;
+        }
+        else
+        {
+            item *= long.Parse(monkey.Operation[1..]);
+        }
+        return item;
+    }
+
+    private static void EnqueueItem(Monkey monkey, long item)
+    {
+        if (item % monkey.DivBy == 0)
+        {
+            monkeys[monkey.IfTrueTarget].Items.Enqueue(item);
+        }
+        else
+        {
+            monkeys[monkey.IfFalseTarget].Items.Enqueue(item);
         }
     }
 
