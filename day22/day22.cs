@@ -1,33 +1,23 @@
 ﻿using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 Console.WriteLine("Part 1: " + Part1());
 Console.WriteLine("Part 2: " + Part2());
 
 int Part1()
 {
-    var input = File.ReadAllText("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day22\\input22.txt");
-    var parts = input.Split($"{Environment.NewLine}{Environment.NewLine}").ToArray();
-    var matches = Regex.Matches(parts.Last(), @"(\d+)([RL]?)");
-    var instructions = matches.Select(x => (Steps: int.Parse(x.Groups[1].Value), Rotate: x.Groups[2].Value));
+    string[] parts;
+    Queue<(int Steps, string Rotate)> instructions;
+    ReadInput(out parts, out instructions);
 
-    var lines = parts
-        .First()
-        .Split(Environment.NewLine)
-        .ToArray();
-    var position = (X: int.MinValue, Y: int.MinValue);
-    var directions = new (int X, int Y)[]
-    {
-        (1, 0),
-        (0, 1),
-        (-1, 0),
-        (0, -1),
-    };
-    var directionIndex = 0;
+    // Parse map from the first part of the input
+    var lines = parts.First().Split(Environment.NewLine).ToArray();
     var map = new Dictionary<(int X, int Y), bool>();
     var minX = new Dictionary<int, int>();
     var maxX = new Dictionary<int, int>();
     var minY = new Dictionary<int, int>();
     var maxY = new Dictionary<int, int>();
+    var position = (X: int.MinValue, Y: int.MinValue);
 
     for (var y = 1; y <= lines.Length; y++)
     {
@@ -35,10 +25,14 @@ int Part1()
         for (var x = 1; x <= line.Length; x++)
         {
             var character = line[x - 1];
+
+            // Skip whitespace characters
             if (char.IsWhiteSpace(character))
             {
                 continue;
             }
+
+            // Update min/max values for x/y
             if (!minX.ContainsKey(y))
             {
                 minX[y] = x;
@@ -66,9 +60,20 @@ int Part1()
         }
     }
 
-    foreach (var instruction in instructions)
+    // Initialize directions and direction index
+    var directions = new (int X, int Y)[]
     {
-        var (steps, rotate) = instruction;
+        (1, 0),
+        (0, 1),
+        (-1, 0),
+        (0, -1),
+    };
+    var directionIndex = 0;
+
+    // Follow instructions on the map
+    while (instructions.Count > 0)
+    {
+        var (steps, rotate) = instructions.Dequeue();
 
         for (var i = 0; i < steps; i++)
         {
@@ -76,6 +81,7 @@ int Part1()
             var next = (position.X + direction.X, position.Y + direction.Y);
             if (!map.TryGetValue(next, out var valid))
             {
+                // Handle out-of-bounds coordinates
                 next = direction switch
                 {
                     (1, 0) => (minX[position.Y], position.Y),
@@ -86,7 +92,6 @@ int Part1()
                 };
                 valid = map[next];
             }
-
             if (!valid)
             {
                 break;
@@ -95,6 +100,7 @@ int Part1()
             position = next;
         }
 
+        // Rotate direction based on instruction
         if (rotate == "R")
         {
             directionIndex += 1;
@@ -107,15 +113,15 @@ int Part1()
         }
     }
 
+    // Calculate final result
     return 1000 * position.Y + 4 * position.X + directionIndex;
 }
 
 int Part2(int length = 50)
 {
-    var input = File.ReadAllText("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day22\\input22.txt");
-    var parts = input.Split($"{Environment.NewLine}{Environment.NewLine}").ToArray();
-    var matches = Regex.Matches(parts.Last(), @"(\d+)([RL]?)");
-    var instructions = matches.Select(x => (Steps: int.Parse(x.Groups[1].Value), Rotate: x.Groups[2].Value));
+    string[] parts;
+    Queue<(int Steps, string Rotate)> instructions;
+    ReadInput(out parts, out instructions);
 
     const string front = nameof(front);
     const string back = nameof(back);
@@ -124,34 +130,31 @@ int Part2(int length = 50)
     const string top = nameof(top);
     const string bottom = nameof(bottom);
 
-    var lines = parts
-        .First()
-        .Split(Environment.NewLine)
-        .ToArray();
+    string[] lines = parts[0].Split(Environment.NewLine, StringSplitOptions.None);
 
-    var faceNeighbours = new Dictionary<string, string[]>
-    {
-        {front, new [] { right, bottom, left, top}},
-        {back, new [] { left, bottom, right, top}},
-        {left, new [] { front, bottom, back, top}},
-        {right, new [] { back, bottom, front, top}},
-        {top, new [] { right, front, left, back}},
-        {bottom, new [] { right, back, left, front}}
-    };
-    var faceOffset = new Dictionary<string, int>();
-    var faceSegment = new Dictionary<string, (int X, int Y)>();
-    var segments = new Dictionary<(int X, int Y), Dictionary<(int X, int Y), bool>>();
+    Dictionary<string, string[]> faceNeighbours = new Dictionary<string, string[]>
+{
+    {front, new [] { right, bottom, left, top}},
+    {back, new [] { left, bottom, right, top}},
+    {left, new [] { front, bottom, back, top}},
+    {right, new [] { back, bottom, front, top}},
+    {top, new [] { right, front, left, back}},
+    {bottom, new [] { right, back, left, front}}
+};
+    Dictionary<string, int> faceOffset = new Dictionary<string, int>();
+    Dictionary<string, (int X, int Y)> faceSegment = new Dictionary<string, (int X, int Y)>();
+    Dictionary<(int X, int Y), Dictionary<(int X, int Y), bool>> segments = new Dictionary<(int X, int Y), Dictionary<(int X, int Y), bool>>();
 
-    var face = front;
-    var position = (X: int.MinValue, Y: int.MinValue);
-    var directions = new (int X, int Y)[]
+    string face = front;
+    (int X, int Y) position = (X: int.MinValue, Y: int.MinValue);
+    (int X, int Y)[] directions =
     {
         (1, 0),
         (0, 1),
         (-1, 0),
         (0, -1),
     };
-    var directionIndex = 0;
+    int directionIndex = 0;
 
     for (var j = 0; j < lines.Length / length; j++)
     {
@@ -219,16 +222,18 @@ int Part2(int length = 50)
     foreach (var instruction in instructions)
     {
         var (steps, rotate) = instruction;
+        var newPosition = position;
+        var newDirectionIndex = directionIndex;
+        var newFace = face;
 
         for (var i = 0; i < steps; i++)
         {
             var direction = directions[directionIndex];
-            var newPosition = (X: position.X + direction.X, Y: position.Y + direction.Y);
-            var newDirectionIndex = directionIndex;
-            var newFace = face;
-            if (!segments[faceSegment[face]].TryGetValue(newPosition, out var valid))
+            newPosition = (X: newPosition.X + direction.X, Y: newPosition.Y + direction.Y);
+
+            if (!segments[faceSegment[newFace]].TryGetValue(newPosition, out var valid))
             {
-                newFace = faceNeighbours[face][(4 + directionIndex - faceOffset[face]) % 4];
+                newFace = faceNeighbours[newFace][(4 + directionIndex - faceOffset[newFace]) % 4];
                 newPosition = position;
                 var relativeFrom = (directionIndex + 2) % 4;
                 var positionOffset = (4 + Array.IndexOf(faceNeighbours[newFace], face) - relativeFrom) % 4;
@@ -281,4 +286,19 @@ int Part2(int length = 50)
     var row = ySegment * length + position.Y + 1;
 
     return 1000 * row + 4 * column + directionIndex;
+}
+
+static void ReadInput(out string[] parts, out Queue<(int Steps, string Rotate)> instructions)
+{
+    // Read input file and split it into two parts
+    var input = File.ReadAllText("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day22\\input22.txt");
+    parts = input.Split($"{Environment.NewLine}{Environment.NewLine}").ToArray();
+
+    // Parse instructions from the second part of the input and store them in a queue
+    var matches = Regex.Matches(parts.Last(), @"(\d+)([RL]?)");
+    instructions = new Queue<(int Steps, string Rotate)>();
+    foreach (Match match in matches)
+    {
+        instructions.Enqueue((int.Parse(match.Groups[1].Value), match.Groups[2].Value));
+    }
 }

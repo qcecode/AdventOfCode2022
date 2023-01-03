@@ -5,36 +5,38 @@ using System.Text.RegularExpressions;
 using System.Collections;
 
 Day16 day16 = new Day16();
-day16.PartOne();
-day16.PartTwo();
+day16.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day16\\example16.txt", true);
+day16.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day16\\input16.txt", false);
 
 public class Day16
 {
-    public object PartOne()
+    // For testing
+    long supposedAnswer1 = 1651;
+    long supposedAnswer2 = 1707;
+
+    public void Run(string inputPath, bool isTest)
     {
-        // fast enough
-        var sol = Solve(true, 30);
-        Console.WriteLine(sol);
-        return sol;
-    }
-    public object PartTwo()
-    {
-        // takes about 10 seconds
-        var sol = Solve(false, 26);
-        Console.WriteLine(sol);
-        return sol;
+        var sol1 = Solve(true, 30, inputPath);
+        WriteAnswer(1, sol1, supposedAnswer1, isTest);
+
+        var sol2 = Solve(false, 26, inputPath);
+        WriteAnswer(2, sol2, supposedAnswer2, isTest);
     }
 
-    int Solve(bool singlePlayer, int time)
+    private int Solve(bool singlePlayer, int time, string inputPath)
     {
-        // initialize and run MaxFlow()
+        var map = Parse(inputPath);
 
-        var map = Parse();
+        var valveMap = new Dictionary<string, Valve>();
+        for (int i = 0; i < map.valves.Length; i++)
+        {
+            valveMap[map.valves[i].name] = map.valves[i];
+        }
 
-        var start = map.valves.Single(x => x.name == "AA");
+        var start = valveMap["AA"];
 
         var valvesToOpen = new BitArray(map.valves.Length);
-        for (var i = 0; i < map.valves.Length; i++)
+        for (int i = 0; i < map.valves.Length; i++)
         {
             if (map.valves[i].flowRate > 0)
             {
@@ -42,11 +44,10 @@ public class Day16
             }
         }
 
+        const int MAX_FLOW = 1000;
         if (singlePlayer)
         {
-            // int.MaxValue is used here as a dummy player that doesn't really do anything, it just
-            // walks towards the start node
-            return MaxFlow(map, 0, 0, new Player(start, 0), new Player(start, int.MaxValue), valvesToOpen, time);
+            return MaxFlow(map, 0, 0, new Player(start, 0), new Player(start, MAX_FLOW), valvesToOpen, time);
         }
         else
         {
@@ -58,46 +59,30 @@ public class Day16
     record Valve(int id, string name, int flowRate, string[] tunnels);
     record Player(Valve valve, int distance);
 
-    // Recursively find the maximum available flow in the map by moving the players, opening valves and advancing
-    // time according to the task description
-    int MaxFlow(
-        Map map,               // this is our map as per task input.
-        int maxFlow,           // is the current maximum we found (call with 0), this is used internally to shortcut
-        int currentFlow,       // the flow produced by the currently investigated steps (on the stack)
-        Player player0,        // this is the 'human' player
-        Player player1,        // this can be a second player, use distance = int.MaxValue to make it inactive
-        BitArray valvesToOpen, // these valves can still be open
-        int remainingTime      // and the remaining time
-    )
+    int MaxFlow(Map map, int maxFlow, int currentFlow, Player player0, Player player1, BitArray valvesToOpen, int remainingTime)
     {
-
-        // briefly: we advance the simulation and collect what states the players can go -> recurse
-        // use lots of early exits to make this approach practical (Residue is an important concept)
-
-        // One of the players is standing next to a valve:
         if (player0.distance != 0 && player1.distance != 0)
         {
-            throw new ArgumentException();
+            throw new ArgumentException("Both players cannot have a non-zero distance.");
         }
 
-        // Compute the next states for each player:
+        // Next states for both players
         var nextStatesByPlayer = new Player[2][];
 
+        // Iterate over both players
         for (var iplayer = 0; iplayer < 2; iplayer++)
         {
-
             var player = iplayer == 0 ? player0 : player1;
 
+            // If the player has a distance, decrement it
             if (player.distance > 0)
             {
-                // this player just steps forward towards the valve
                 nextStatesByPlayer[iplayer] = new[] { player with { distance = player.distance - 1 } };
-
             }
+            // If the player is at a valve and the valve is open, increase the current flow
+            // and mark the valve as closed
             else if (valvesToOpen[player.valve.id])
             {
-                // the player is next to the valve, the valve is still closed, let's open:
-                // (this takes 1 time, so multiply with remainingTime -1)
                 currentFlow += player.valve.flowRate * (remainingTime - 1);
 
                 if (currentFlow > maxFlow)
@@ -105,19 +90,15 @@ public class Day16
                     maxFlow = currentFlow;
                 }
 
-                valvesToOpen = new BitArray(valvesToOpen); // copy on write
+                valvesToOpen = new BitArray(valvesToOpen);
                 valvesToOpen[player.valve.id] = false;
 
-                // in the next round this player will take some new target, 
-                // but it already used up it's 1 second this round for opening the valve
                 nextStatesByPlayer[iplayer] = new[] { player };
-
             }
+            // If the player is at a valve and the valve is closed, generate next states
+            // by finding all open valves and computing the distance to them
             else
             {
-                // the valve is already open, let's try each valves that are still closed:
-                // this is where brancing happens
-
                 var nextStates = new List<Player>();
 
                 for (var i = 0; i < valvesToOpen.Length; i++)
@@ -126,7 +107,6 @@ public class Day16
                     {
                         var nextValve = map.valves[i];
                         var distance = map.distances[player.valve.id, nextValve.id];
-                        // the player moves in this time slot towards the valve, so use distance - 1 here
                         nextStates.Add(new Player(nextValve, distance - 1));
                     }
                 }
@@ -135,38 +115,33 @@ public class Day16
             }
         }
 
-        // ran out of time, cannot improve maxFlow
         remainingTime--;
         if (remainingTime < 1)
         {
             return maxFlow;
         }
 
-        // the is not enough juice left for the remaining time to improve on maxFlow
-        // we can shortcut here
+        // If the current flow plus the residue is less than or equal to the max flow, return the max flow
         if (currentFlow + Residue(valvesToOpen, map, remainingTime) <= maxFlow)
         {
             return maxFlow;
         }
 
-        // all is left is going over every possible step combinations for each players:
+        // Iterate over all next states for both players
         for (var i0 = 0; i0 < nextStatesByPlayer[0].Length; i0++)
         {
             for (var i1 = 0; i1 < nextStatesByPlayer[1].Length; i1++)
             {
-
                 player0 = nextStatesByPlayer[0][i0];
                 player1 = nextStatesByPlayer[1][i1];
 
-                // there is no point in walking to the same valve
-                // if one of the players has other thing to do:
+                // If both players are at the same valve, skip this iteration
                 if ((nextStatesByPlayer[0].Length > 1 || nextStatesByPlayer[1].Length > 1) && player0.valve == player1.valve)
                 {
                     continue;
                 }
 
-                // this is an other optimization, if both players are walking
-                // we can advance time until one of them reaches target:
+                // Calculate the time advancement
                 var advance = 0;
                 if (player0.distance > 0 && player1.distance > 0)
                 {
@@ -175,6 +150,7 @@ public class Day16
                     player1 = player1 with { distance = player1.distance - advance };
                 }
 
+                // Recursively call MaxFlow with updated values
                 maxFlow = MaxFlow(
                     map,
                     maxFlow,
@@ -189,104 +165,92 @@ public class Day16
 
         return maxFlow;
     }
-
-    int Residue(BitArray valvesToOpen, Map map, int remainingTime)
+  
+    private int Residue(BitArray valvesToOpen, Map map, int remainingTime)
     {
-        // Some upper bound for the possible amount of flow that we can
-        // still produce in the remaining time. 
-
-        // IT'S JUST AN UPPER BOUND. HEURISTICAL
-
-        // The valves are in decreasing order of flowRate. We open the 
-        // first two (we have two players), this takes 1 time then we 
-        // step to the next two valves supposing that each valve is 
-        // just one step away. Open these as well. Continue until we run 
-        // out of time.
-
-        var flow = 0;
-        for (var i = 0; i < valvesToOpen.Length; i++)
+        int flow = 0;
+        for (int i = 0; i < valvesToOpen.Length; i++)
         {
             if (valvesToOpen[i])
             {
-                if (remainingTime <= 0)
-                {
-                    break;
-                }
-
-                flow += map.valves[i].flowRate * (remainingTime - 1);
-
+                int flowRate = map.valves[i].flowRate;
+                flow += flowRate * (remainingTime - 1);
                 if ((i & 1) == 0)
                 {
                     remainingTime--;
                 }
             }
+            if (remainingTime <= 0)
+            {
+                break;
+            }
         }
         return flow;
     }
 
-    Map Parse()
+    private Map Parse(string inputPath)
     {
-
-        var input = File.ReadAllText("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day16\\input16.txt");
-
-        // Valve BB has flow rate=0; tunnels lead to valve CC
-        // Valve CC has flow rate=10; tunnels lead to valves DD, EE
-        var valveList = new List<Valve>();
-        foreach (var line in input.Split("\n"))
-        {
-            var nLine = line.Trim();
-            var name = Regex.Match(nLine, "Valve (.*) has").Groups[1].Value;
-            var flow = int.Parse(Regex.Match(nLine, @"\d+").Groups[0].Value);
-            var tunnels = Regex.Match(nLine, "to valves? (.*)").Groups[1].Value.Split(", ").ToArray();
-            valveList.Add(new Valve(0, name, flow, tunnels));
-        }
-        var valves = valveList
-            .OrderByDescending(valve => valve.flowRate)
-            .Select((v, i) => v with { id = i })
-            .ToArray();
-
+        string input = File.ReadAllText(inputPath);
+        Valve[] valves = ParseValves(input);
         return new Map(ComputeDistances(valves), valves);
     }
 
-    int[,] ComputeDistances(Valve[] valves)
+    private Valve[] ParseValves(string input)
     {
-        // Bellman-Ford style distance calculation for every pair of valves
-        var distances = new int[valves.Length, valves.Length];
-        for (var i = 0; i < valves.Length; i++)
+        List<Valve> valveList = new List<Valve>();
+        foreach (string line in input.Split("\n"))
         {
-            for (var j = 0; j < valves.Length; j++)
-            {
-                distances[i, j] = int.MaxValue;
-            }
+            string nLine = line.Trim();
+            string name = nLine.Split(" ")[1];
+            int flow = int.Parse(Regex.Match(nLine, @"\d+").Groups[0].Value);
+            string[] tunnels = Regex.Match(nLine, "to valves? (.*)").Groups[1].Value.Split(", ");
+            valveList.Add(new Valve(0, name, flow, tunnels));
         }
-        foreach (var valve in valves)
+        return valveList
+            .OrderByDescending(valve => valve.flowRate)
+            .Select((v, i) => v with { id = i })
+            .ToArray();
+    }
+
+
+    private int[,] ComputeDistances(Valve[] valves)
+    {
+        int[,] distances = InitializeDistances(valves);
+
+        var valveMap = new Dictionary<string, Valve>();
+        for (int i = 0; i < valves.Length; i++)
         {
-            foreach (var target in valve.tunnels)
+            valveMap[valves[i].name] = valves[i];
+        }
+
+        foreach (Valve valve in valves)
+        {
+            foreach (string target in valve.tunnels)
             {
-                var targetNode = valves.Single(x => x.name == target);
+                Valve targetNode = valveMap[target];
                 distances[valve.id, targetNode.id] = 1;
                 distances[targetNode.id, valve.id] = 1;
             }
         }
 
-        var n = distances.GetLength(0);
-        var done = false;
+        bool done = false;
         while (!done)
         {
             done = true;
-            for (var source = 0; source < n; source++)
+            for (int source = 0; source < distances.GetLength(0); source++)
             {
-                for (var target = 0; target < n; target++)
+                for (int target = 0; target < distances.GetLength(0); target++)
                 {
                     if (source != target)
                     {
-                        for (var through = 0; through < n; through++)
+                        for (int through = 0; through < distances.GetLength(0); through++)
                         {
                             if (distances[source, through] == int.MaxValue || distances[through, target] == int.MaxValue)
                             {
                                 continue;
                             }
-                            var cost = distances[source, through] + distances[through, target];
+
+                            int cost = distances[source, through] + distances[through, target];
                             if (cost < distances[source, target])
                             {
                                 done = false;
@@ -299,5 +263,57 @@ public class Day16
             }
         }
         return distances;
+    }
+
+    private int[,] InitializeDistances(Valve[] valves)
+    {
+        int[,] distances = new int[valves.Length, valves.Length];
+        for (int i = 0; i < valves.Length; i++)
+        {
+            for (int j = 0; j < valves.Length; j++)
+            {
+                distances[i, j] = int.MaxValue;
+            }
+        }
+        return distances;
+    }
+
+    private void WriteAnswer<T>(int number, T val, T supposedval, bool isTest)
+    {
+        // Convert the values to strings for output
+        string v = val?.ToString() ?? "(null)";
+        string sv = supposedval?.ToString() ?? "(null)";
+
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("Answer Part " + number + ": ");
+        if (isTest)
+        {
+            // If this is a test, compare the actual and supposed values
+            if (v == sv)
+            {
+                // If they match, output in green
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(v);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" ... supposed (example) answer: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(sv);
+            }
+            else
+            {
+                // If they don't match, output in white
+                Console.Write(v);
+                Console.Write(" ... supposed (example) answer: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(sv);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+        else
+        {
+            // If this is not a test, just output the answer
+            Console.WriteLine(v);
+        }
+        Console.ForegroundColor = ConsoleColor.White;
     }
 }

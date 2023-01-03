@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 
 Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day25\\example25.txt", true);
-
 Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day25\\input25.txt", false);
 
 void Run(string path, bool isTest)
@@ -47,7 +46,7 @@ void Run(string path, bool isTest)
         }
     }
     Console.WriteLine($"Fuel requirements sum: {resultToPrint} | SNAFU sum: {SNAFUResult}");
-    w(1, SNAFUResult, ExampleAnswer1, isTest);
+    WriteAnswer(1, SNAFUResult, ExampleAnswer1, isTest);
     Console.WriteLine();
 }
 
@@ -77,21 +76,41 @@ static void Process(List<string> input, List<long> numbers)
     }
 }
 
-static void w<T>(int number, T val, T supposedval, bool isTest)
+static void WriteAnswer<T>(int number, T val, T supposedval, bool isTest)
 {
-    string? v = (val == null) ? "(null)" : val.ToString();
-    string? sv = (supposedval == null) ? "(null)" : supposedval.ToString();
+    // Convert the values to strings for output
+    string v = val?.ToString() ?? "(null)";
+    string sv = supposedval?.ToString() ?? "(null)";
 
-    var previouscolour = Console.ForegroundColor;
+    Console.ForegroundColor = ConsoleColor.White;
     Console.Write("Answer Part " + number + ": ");
-    Console.ForegroundColor = (v == sv) ? ConsoleColor.Green : ConsoleColor.White;
-    Console.Write(v);
-    Console.ForegroundColor = previouscolour;
     if (isTest)
     {
-        Console.Write(" ... supposed (example) answer: ");
-        Console.WriteLine(sv);
+        // If this is a test, compare the actual and supposed values
+        if (v == sv)
+        {
+            // If they match, output in green
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(v);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+        }
+        else
+        {
+            // If they don't match, output in white
+            Console.Write(v);
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
     else
-        Console.WriteLine();
+    {
+        // If this is not a test, just output the answer
+        Console.WriteLine(v);
+    }
+    Console.ForegroundColor = ConsoleColor.White;
 }

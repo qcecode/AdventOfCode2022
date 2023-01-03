@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Net.Security;
-using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
 
 Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day24\\example24.txt", true);
 Console.Clear();
@@ -10,32 +6,31 @@ Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day24\\input24.
 
 void Run(string inputfile, bool isTest)
 {
-    int supposedanswer1 = 18;
-    int supposedanswer2 = 54;
+    int ExampleAnswer1 = 18;
+    int ExampleAnswer2 = 54;
 
-    var S = File.ReadAllLines(inputfile).ToList();
+    var input = File.ReadAllLines(inputfile).ToList();
     int answer1 = 0;
     int answer2 = 0;
-    int xCnt = S[0].Length - 2;
-    int yCnt = S.Count - 2;
+    int xCnt = input[0].Length - 2;
+    int yCnt = input.Count - 2;
 
-    var numstates = yCnt * xCnt;
+    var lcm = yCnt * xCnt;
     for (int x = 1; x <= xCnt; x++)
     {
         for (int y = 1; y <= yCnt; y++)
         {
-            if (x * yCnt == y * xCnt && y * xCnt < numstates) numstates = y * xCnt;
+            if (x * yCnt == y * xCnt && y * xCnt < lcm) lcm = y * xCnt;
         }
     }
 
-    var isFree = new bool[yCnt, xCnt, numstates];
-
+    var isFree = new bool[yCnt, xCnt, lcm];
     var fields = new byte[yCnt, xCnt];
 
     int i = 1;
-    while (i < S.Count - 1)
+    while (i < input.Count - 1)
     {
-        var s = S[i];
+        var s = input[i];
         for (int j = 1; j < s.Length - 1; j++)
         {
             byte val = 0;
@@ -52,7 +47,7 @@ void Run(string inputfile, bool isTest)
         i++;
     }
 
-    for (int j = 0; j < numstates; j++)
+    for (int j = 0; j < lcm; j++)
     {
         var newfields = new byte[yCnt, xCnt];
 
@@ -91,41 +86,42 @@ void Run(string inputfile, bool isTest)
         }
         fields = newfields;
     }
-    int startX = S[0].IndexOf('.') - 1;
-    int endX = S[^1].IndexOf('.') - 1;
+
+    int startX = input[0].IndexOf('.') - 1;
+    int endX = input[^1].IndexOf('.') - 1;
     int startY = -1;
     int endY = yCnt;
 
     var work = new HashSet<(int y, int x, int state, (int y, int x)[] path)>();
 
-    var visited = new bool[yCnt, xCnt, numstates];
-    int[,,] shortest = EmptyLookup(xCnt, yCnt, numstates);
+    var visited = new bool[yCnt, xCnt, lcm];
+    int[,,] shortest = EmptyLookup(xCnt, yCnt, lcm);
 
     int firstpos = 1;
     var l = new List<(int y, int x)>();
-    (int y, int x)[] path = FindPath(ref answer1, xCnt, yCnt, numstates, isFree, startX, endX, startY, endY, shortest, work, visited, ref firstpos, ref l);
-    fields = PrintPath(S, answer1, xCnt, yCnt, fields, i, path);
+    (int y, int x)[] path = FindPath(ref answer1, xCnt, yCnt, lcm, isFree, startX, endX, startY, endY, shortest, work, visited, ref firstpos, ref l);
+    fields = PrintPath(input, answer1, xCnt, yCnt, fields, i, path);
 
-    visited = new bool[yCnt, xCnt, numstates];
-    shortest = EmptyLookup(xCnt, yCnt, numstates);
+    visited = new bool[yCnt, xCnt, lcm];
+    shortest = EmptyLookup(xCnt, yCnt, lcm);
 
     firstpos = answer1 + 1;
     l = new List<(int y, int x)>(path);
-    path = FindPath(ref answer2, xCnt, yCnt, numstates, isFree, endX, startX, endY, startY, shortest, work, visited, ref firstpos, ref l);
-    fields = PrintPath(S, answer2, xCnt, yCnt, fields, i, path);
+    path = FindPath(ref answer2, xCnt, yCnt, lcm, isFree, endX, startX, endY, startY, shortest, work, visited, ref firstpos, ref l);
+    fields = PrintPath(input, answer2, xCnt, yCnt, fields, i, path);
 
-    visited = new bool[yCnt, xCnt, numstates];
-    shortest = EmptyLookup(xCnt, yCnt, numstates);
+    visited = new bool[yCnt, xCnt, lcm];
+    shortest = EmptyLookup(xCnt, yCnt, lcm);
 
     firstpos = answer2 + 1;
     l = new List<(int y, int x)>(path);
-    path = FindPath(ref answer2, xCnt, yCnt, numstates, isFree, startX, endX, startY, endY, shortest, work, visited, ref firstpos, ref l);
-    fields = PrintPath(S, answer2, xCnt, yCnt, fields, i, path);
+    path = FindPath(ref answer2, xCnt, yCnt, lcm, isFree, startX, endX, startY, endY, shortest, work, visited, ref firstpos, ref l);
+    fields = PrintPath(input, answer2, xCnt, yCnt, fields, i, path);
 
     Console.SetCursorPosition(0, 1 + yCnt + 2);
 
-    w(1, answer1, supposedanswer1, isTest);
-    w(2, answer2, supposedanswer2, isTest);
+    WriteAnswer(1, answer1, ExampleAnswer1, isTest);
+    WriteAnswer(2, answer2, ExampleAnswer2, isTest);
 
     Console.WriteLine("Press any key");
     Console.ReadKey();
@@ -207,23 +203,42 @@ void Run(string inputfile, bool isTest)
     }
 }
 
-static void w<T>(int number, T val, T supposedval, bool isTest)
+static void WriteAnswer<T>(int number, T val, T supposedval, bool isTest)
 {
-    string? v = (val == null) ? "(null)" : val.ToString();
-    string? sv = (supposedval == null) ? "(null)" : supposedval.ToString();
+    // Convert the values to strings for output
+    string v = val?.ToString() ?? "(null)";
+    string sv = supposedval?.ToString() ?? "(null)";
 
-    var previouscolour = Console.ForegroundColor;
+    Console.ForegroundColor = ConsoleColor.White;
     Console.Write("Answer Part " + number + ": ");
-    Console.ForegroundColor = (v == sv) ? ConsoleColor.Green : ConsoleColor.White;
-    Console.Write(v);
-    Console.ForegroundColor = previouscolour;
     if (isTest)
     {
-        Console.Write(" ... supposed (example) answer: ");
-        Console.WriteLine(sv);
+        // If this is a test, compare the actual and supposed values
+        if (v == sv)
+        {
+            // If they match, output in green
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(v);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+        }
+        else
+        {
+            // If they don't match, output in white
+            Console.Write(v);
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
     else
-        Console.WriteLine();
+    {
+        // If this is not a test, just output the answer
+        Console.WriteLine(v);
+    }
 }
 
 static byte[,] PrintPath(List<string> S, int answer1, int xCnt, int yCnt, byte[,] fields, int i, (int y, int x)[] path)

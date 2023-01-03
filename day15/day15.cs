@@ -2,13 +2,9 @@
 
 
 Day15.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day15\\input15.txt");
+Day15.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day15\\example15.txt");
 public class Day15
 {
-    private static Regex lineRegEx = new(
-        @"^Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)$",
-        RegexOptions.Compiled
-    );
-
     private static int Distance((int x, int y) p1, (int x, int y) p2)
     {
         return Math.Abs(p1.x - p2.x) + Math.Abs(p1.y - p2.y);
@@ -29,35 +25,25 @@ public class Day15
         HashSet<(int x, int y)> beacons = new();
         List<(int cx, int cy, int r)> circles = new();
 
-        using (StreamReader reader = File.OpenText(filePath))
+        string[] lines = File.ReadAllLines(filePath);
+        foreach (string line in lines)
         {
-            string? line;
-            //find all the senor and beacon locations and constuct a taxi cab circle around all
-            //sensors
-            while ((line = reader.ReadLine()) != null)
-            {
-                var match = lineRegEx.Match(line);
-                int sx = int.Parse(match.Groups[1].Value);
-                int sy = int.Parse(match.Groups[2].Value);
-                sensors.Add((sx, sy));
-
-                int bx = int.Parse(match.Groups[3].Value);
-                int by = int.Parse(match.Groups[4].Value);
-
-                beacons.Add((bx, by));
-
-                int r = Distance((bx, by), (sx, sy));
-
-                circles.Add((sx, sy, r));
-            }
+            var nline = line.Replace("Sensor at x=", "").Replace(" y=", "").Replace(": closest beacon is at x=", ",").Trim();
+            string[] values = nline.Split(',');
+            int sx = int.Parse(values[0]);
+            int sy = int.Parse(values[1]);
+            sensors.Add((sx, sy));
+            int bx = int.Parse(values[2]);
+            int by = int.Parse(values[3]);
+            beacons.Add((bx, by));
+            int r = Distance((bx, by), (sx, sy));
+            circles.Add((sx, sy, r));
         }
 
-        int lowerBounds = 0;
-        int upperBounds = 4000000;
+        int min = 0;
+        int max = 4000000;
         HashSet<(int x, int y)> toCheck = new();
 
-        // Find each pair of sensor circles that have exatly one space between them and then add the
-        // points between them to the set of points to check
         for (int i = 0; i < circles.Count; i++)
         {
             var circle = circles[i];
@@ -72,36 +58,32 @@ public class Day15
 
                 if (Distance((circle.cx, circle.cy), (circle2.cx, circle2.cy)) == circle.r + circle2.r + 2)
                 {
-                    int endy = Math.Min(circle.cy + circle.r, circle2.cy + circle2.r);
-                    int starty = Math.Max(circle.cy - circle.r, circle2.cy - circle2.r);
+                    int yEnd = Math.Min(circle.cy + circle.r, circle2.cy + circle2.r);
+                    int yStart = Math.Max(circle.cy - circle.r, circle2.cy - circle2.r);
 
-                    int startx = Math.Max(circle.cx - circle.r, circle2.cx - circle2.r);
-                    int endx = Math.Min(circle.cx + circle.r, circle2.cx + circle2.r);
+                    int xStart = Math.Max(circle.cx - circle.r, circle2.cx - circle2.r);
+                    int xEnd = Math.Min(circle.cx + circle.r, circle2.cx + circle2.r);
 
-                    for (int y = starty; y < endy; y++)
+                    for (int y = yStart; y < yEnd; y++)
                     {
                         int x1 = circle.cx + (circle.r + 1 - Math.Abs(y - circle.cy));
                         int x2 = circle.cx - (circle.r + 1 - Math.Abs(y - circle.cy));
 
-                        if (x1 >= lowerBounds && x1 <= upperBounds &&
-                            x1 >= startx && x1 <= endx)
+                        if (x1 >= min && x1 <= max &&
+                            x1 >= xStart && x1 <= xEnd)
                         {
                             toCheck.Add((x1, y));
                         }
-                        if (x2 >= lowerBounds && x2 <= upperBounds &&
-                            x2 >= startx && x2 <= endx)
+                        if (x2 >= min && x2 <= max &&
+                            x2 >= xStart && x2 <= xEnd)
                         {
                             toCheck.Add((x2, y));
                         }
                     }
                 }
             }
-
-
         }
 
-        //// For each pointto check, check if it is inside a sensor range.  If
-        //// not, print out it's tuning frequency and exit
         foreach (var point in toCheck)
         {
             if (sensors.Contains(point) || beacons.Contains(point))
@@ -124,8 +106,5 @@ public class Day15
                 return;
             }
         }
-
     }
-
-
 }

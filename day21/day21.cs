@@ -6,18 +6,27 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using static System.Console;
 
-var S = File.ReadAllLines("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day21\\input21.txt").ToList();
-Run(S);
-static void Run(List<string> input)
+Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day21\\example21.txt", true);
+Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day21\\input21.txt", false);
+static void Run(string inputString, bool isTest)
 {
+    // For testing
+    long supposedanswer1 = 152;
+    long supposedanswer2 = 301;
+
+
+    // Parse input
     var numbers = new Dictionary<string, long>();
     var waiting = new List<(string name, string a, string operation, string b)>();
+
+    var input = File.ReadAllLines(inputString).ToList();
 
     foreach (var line in input)
     {
         string monkey = line.Substring(0, 4);
         string rest = line.Substring(6);
-        if ('0' <= rest[0] && rest[0] <= '9')
+
+        if (char.IsDigit(rest[0]))
         {
             numbers.Add(monkey, long.Parse(rest));
         }
@@ -28,7 +37,7 @@ static void Run(List<string> input)
         }
     }
 
-
+    // Compute and print result for Part 1
     var numbersBase = new Dictionary<string, long>(numbers);
     numbersBase.Remove("humn");
     var waitingBase = new List<(string name, string a, string operation, string b)>(waiting);
@@ -40,57 +49,32 @@ static void Run(List<string> input)
         var item = waiting.First(w => numbers.ContainsKey(w.a) && numbers.ContainsKey(w.b));
         waiting.Remove(item);
 
-        switch (item.operation)
-        {
-            case "+":
-                numbers[item.name] = numbers[item.a] + numbers[item.b];
-                break;
-            case "-":
-                numbers[item.name] = numbers[item.a] - numbers[item.b];
-                break;
-            case "*":
-                numbers[item.name] = numbers[item.a] * numbers[item.b];
-                break;
-            case "/":
-                numbers[item.name] = numbers[item.a] / numbers[item.b];
-                break;
-            default:
-                throw new Exception();
-        }
+        numbers[item.name] = Compute(item.operation, numbers[item.a], numbers[item.b]);
     }
 
-    WriteLine($"Part 1: {numbers["root"]}");
+    WriteAnswer(1, numbers["root"], supposedanswer1, isTest);
 
+    // Compute and print result for Part 2
     long crack = 0;
     while (true)
     {
         numbers = new Dictionary<string, long>(numbersBase);
         waiting = new List<(string name, string a, string operation, string b)>(waitingBase);
         numbers["humn"] = crack;
+
         while (waiting.Count > 0)
         {
             var item = waiting.First(w => numbers.ContainsKey(w.a) && numbers.ContainsKey(w.b));
             waiting.Remove(item);
 
-            switch (item.operation)
-            {
-                case "+":
-                    numbers[item.name] = numbers[item.a] + numbers[item.b];
-                    break;
-                case "-":
-                    numbers[item.name] = numbers[item.a] - numbers[item.b];
-                    break;
-                case "*":
-                    numbers[item.name] = numbers[item.a] * numbers[item.b];
-                    break;
-                case "/":
-                    numbers[item.name] = numbers[item.a] / numbers[item.b];
-                    break;
-                default:
-                    throw new Exception();
-            }
+            numbers[item.name] = Compute(item.operation, numbers[item.a], numbers[item.b]);
         }
-        if (numbers[root.a] == numbers[root.b]) break;
+
+        if (numbers[root.a] == numbers[root.b])
+        {
+            break;
+        }
+
         long diff = numbers[root.a] - numbers[root.b];
         if (diff < 100)
         {
@@ -101,5 +85,64 @@ static void Run(List<string> input)
             crack += diff / 100;
         }
     }
-    WriteLine($"Part 2: {crack}");
+
+    WriteAnswer(2, crack, supposedanswer2, isTest);
 }
+
+static long Compute(string operation, long a, long b)
+{
+    switch (operation)
+    {
+        case "+":
+            return a + b;
+        case "-":
+            return a - b;
+        case "*":
+            return a * b;
+        case "/":
+            return a / b;
+        default:
+            throw new Exception();
+    }
+}
+
+static void WriteAnswer<T>(int number, T val, T supposedval, bool isTest)
+{
+    // Convert the values to strings for output
+    string v = val?.ToString() ?? "(null)";
+    string sv = supposedval?.ToString() ?? "(null)";
+
+    Console.ForegroundColor = ConsoleColor.White;
+    Console.Write("Answer Part " + number + ": ");
+    if (isTest)
+    {
+        // If this is a test, compare the actual and supposed values
+        if (v == sv)
+        {
+            // If they match, output in green
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(v);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+        }
+        else
+        {
+            // If they don't match, output in white
+            Console.Write(v);
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+    }
+    else
+    {
+        // If this is not a test, just output the answer
+        Console.WriteLine(v);
+    }
+    Console.ForegroundColor = ConsoleColor.White;
+}
+
+

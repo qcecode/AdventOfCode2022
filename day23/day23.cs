@@ -89,36 +89,64 @@ void Run(string inputfile, bool isTest)
     }
     answer2 = k;
 
-    w(1, answer1, supposedanswer1, isTest);
-    w(2, answer2, supposedanswer2, isTest);
+    WriteAnswer(1, answer1, supposedanswer1, isTest);
+    WriteAnswer(2, answer2, supposedanswer2, isTest);
 }
 
 bool NoElvesArround(HashSet<(long x, long y)> elves, (long x, long y) elf)
 {
-    bool result = true;
+    // Check all 8 surrounding cells
     for (int x = -1; x <= 1; x++)
+    {
         for (int y = -1; y <= 1; y++)
-            result = result && (x == 0 && y == 0 || !elves.Contains((elf.x + x, elf.y + y)));
-    return result;
+        {
+            // Skip the current cell
+            if (x == 0 && y == 0) continue;
+
+            if (elves.Contains((elf.x + x, elf.y + y)))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
 }
 
-static void w<T>(int number, T val, T supposedval, bool isTest)
+static void WriteAnswer<T>(int number, T val, T supposedval, bool isTest)
 {
-    string? v = (val == null) ? "(null)" : val.ToString();
-    string? sv = (supposedval == null) ? "(null)" : supposedval.ToString();
+    // Convert the values to strings for output
+    string v = val?.ToString() ?? "(null)";
+    string sv = supposedval?.ToString() ?? "(null)";
 
-    var previouscolour = Console.ForegroundColor;
+    Console.ForegroundColor = ConsoleColor.White;
     Console.Write("Answer Part " + number + ": ");
-    Console.ForegroundColor = (v == sv) ? ConsoleColor.Green : ConsoleColor.White;
-    Console.Write(v);
-    Console.ForegroundColor = previouscolour;
     if (isTest)
     {
-        Console.Write(" ... supposed (example) answer: ");
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine(sv);
-        Console.ForegroundColor = previouscolour;
+        // If this is a test, compare the actual and supposed values
+        if (v == sv)
+        {
+            // If they match, output in green
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(v);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+        }
+        else
+        {
+            // If they don't match, output in white
+            Console.Write(v);
+            Console.Write(" ... supposed (example) answer: ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(sv);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
     else
-        Console.WriteLine();
+    {
+        // If this is not a test, just output the answer
+        Console.WriteLine(v);
+    }
 }

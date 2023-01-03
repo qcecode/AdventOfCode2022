@@ -3,200 +3,313 @@ using System.Collections.Generic;
 using System.Linq;
 
 Day17 day = new Day17();
-Console.WriteLine(day.PartTwo(">><<<>><<<<>>><>><>>><<<>>>><>>><<><<<>>>><<<><<<><<><<<>>>><<><<>>><<<<>><<>><<<><<<<>><<<<><>>><<<<>>><<<>>>><<<>>>><<<<>>><<>>><<>>>><<<<>>>><<<<>><>>>><<<<>>><<>><>>><>>><<<<>>><<>>><>><<<>>>><<>>>><<<>>><<<>>>><<<<><<<><<>>><>><<<<>><>><<><<<<>>><<>>><<<>>>><<<<>>><<>>>><<<<>><>><<<><<>><<<>>>><<<>><<<<>>>><<<><<<<>>><<><>>><<>><<<>>><<<<>>><<>>>><<<>>><<<<>>><<>>>><<<<>><<>>>><<<>>>><<>>><<><<<>>><<<<>>>><<<<>>><<<>>>><<<<>><<<>>>><>>><><<>>><<<><<>>>><<<>>>><<><<<<>>>><<<><<>><<<<>>>><<>>><>>>><<<<>><<>>><<>>><<>><>><><<<<>>>><<<>><<>>><<><<<<>>>><<<<><<<<>>>><><<>>><><>>><<>>><>>><>>>><<>><><<>><>>><<>>>><<>>>><<<<><<<>>>><>><>>>><<<<><<<><<<>>>><<><<>><<<>>><<<<>>><<<<><<>>><<<>>>><<><<<<>><<<<>><<<><>><>>>><><<<>>><<<<><<<<>><>>><<<>><<<<><<<>>>><<<>>>><<<>><<>><<<<>><<<<>><>>>><<>>>><<<<>>><<>>>><<>>>><>><<<>>>><<<<>>><<<<><>>>><<><<<>><<<<>>>><<<<>><>>>><<<>>>><<<<>>>><<<<>>><<<<>><>>><<<<><>>>><<><>>>><>><<>>>><>>>><<>><<>>><<<>>>><<><<<>>>><<><<>><<<<>>><<<>>><<<<>><<<><<<>>><<><<>>>><<<>>><<>>><<<><<<<>>><>>>><<<>>><<<>>>><<><><<>>>><<>>>><<>>>><<>>><<>><<><<<>>><>>><<<<>>>><>>>><<<>><>><<<<>>><<<<>>><<>>><<<<><<<>>><>>>><<>><<<<>><<<<>><<<<><>><<<<>>>><<>>><>><<<>><<>><<<<>><<>>><<<<>>><<<<>>><<><<<>>><<><<<><<>>>><>><<><<<<><<>><<<>>>><><<<<><><><>>><<<>>><<>>><<<>>>><<><<>><<>><<<><<<<>>>><>>>><<>>>><<<>>>><<>>>><<<>><>><<<>>><<>>>><<><<>>>><<<><<<<>>><<<>>>><<<>>><<<><>>><<>>><<<>>>><<<>>>><<<>>>><<<>><>><<<>>><<<<>>>><><<<>>>><<>>>><><>>><<>>>><<>><<>>>><<<>><<<>>>><<>>>><<<<>><<<>><<<>><<>><<<>>><<><>>><<><<><>>>><<<>>>><<<<>><<>>>><<<<>><><<<>>><<<<>><<>>><<<>><<>><<>><>>>><<><<>>>><>>>><<><><<<><<<<>>>><<<<>><<><<><<>>>><>>><<<><<<<><<>><<<><<>><><<><<<>>>><>>>><<>>>><>><><><<<><<><<>>><<<<><<>><<<>>>><<><<<<>>>><<<<>><><<<<>><<>><>><<<<>>>><<>>>><<<<><<<>><<>>><<<>>><>>><<>>>><<<><<<<><<>>>><<<<>><<<>>>><<<>><<<<><<<>><<<<>><<<>>>><<>>>><><>>><>>><<<>>>><<>>><<<>><>>>><<<>>>><<<<><<<>>><<<<>><<>><<>><<<><<<<>>><><>><<<><<<>>><<<><<<<>>>><><<<<>><<>><>>><<<>>>><<>>><<<>><<<<>>><<<>><<>><<>><<<<><<>>><>><<>>><<><<<><<<>><<<<>>><>><><<<<>>>><<<><<<>><>><<>>>><<<>>>><<<><<<>>><<>>><><>><<<>><>>>><<<<>>>><<<<>>><<<<>>><<<<>><<<<><><<>><>><<>>><<>><<><<<<>>>><<<<>>>><<>>>><<<<>>>><<>>>><>>>><<>><<><<<><><>><<<><<<<>>>><<<<>><<<>>>><<<<>>>><>>>><><<<<>><>>><<<<><<>>>><>><<<<>><<<><<<>>>><<>><<>>><>>>><<><>>>><<<<><<><<<>>>><<<>>>><<><>><<<>><<<>><<<<><<>>><>><<>>><<>>><>>>><<<>>><<>><<><><<>>>><<<>>><<<>><<<>>><<<>>>><<>>><>>>><>>>><>>><<>>>><<<>><<<<>><<<<>><<>>>><><>>>><<>>>><<<><<<<><<>>>><<<<>><<<<>>>><><<<><>><<<<>>>><>>>><<<<>>>><<><>><<<<><<<>>><<<<>><>><>>>><<>>>><>>><>>>><>><<>>><<<><>><>>>><<<>><<<>><<<<><<<<>>><<<>>><<<>>>><>><>>><<<<>><<<><<>>><>>><<><>>>><<<>>>><<<<>>>><><<<>>><<<<>>><>><>>>><<<>><<>>>><>>><<<<>>>><<<>><<<>>>><<<<>><<<>>><<<<><<<<>>>><><<<>>><<<<>>>><<<<>><<>><<<>>><>>><>><<>>><<<>><><<><>><<>><>><<<><<<<>>><<<>><<<><<<>>>><<>>><<<<><<><<<>>><<<<>>><<>><>>><>>><<<><<>>>><<<>><<<<><<<>><<<<>><>><<>><>>>><>>>><<>>><<<<>>><><><><<<>>><<<>><<>>><<<<>>>><>><<<>>>><<>><<<<>><<>><>><<<>>>><>>><<<<>>><>><<>>><<<>><<<<>>>><<<>><<>><>><<<<>><<<><<<>><>><<<><<<>>>><<<<>>><<><<<<><<<<>>>><<<><>><<><>>><<<><<><<<<>>><<>>>><>><<<<>><<<<>>><<>>>><>>><<<>>><<<>>>><<>>><>>>><<<<><>><<>>>><<<>>><>>><>><<<>>>><<><<<>>>><<><<<<>>>><<<<>>>><><<<<>>>><<<>>>><<><<<>>>><<>><>><>>><<<<><<<>>>><<<<>>>><<<><<>>>><<<><>>>><<<<>>>><>>><<<>><<<<><<>>><<>>><<>>><>>><<<><><><<<>>>><<>>>><<<<><>>>><<<>><<>>>><<><<<<><<<<>><><<<<><<>>>><<<>><<<<>><<>><<><<>>>><<><<<><<<<><<<<>>><<<>>>><<<<>>><><<<>>><>>>><>>><<<<>>><<<>>><<<<><<<<><<>><><<<>>><>>><<><<><<>><<<<>>>><<<>><<<><<<<>>><<<<>>><<>><<<<>><>>>><>><<<><>>>><<<>>><<><<>><<<><<<>><<<<>><<<<>><<<<><>>>><<><<<>><<<><<<>><<<<><<>>>><<<>><<<><<<>>><<<><<<<>>>><<>>>><<<>><<<<>>><<><<<<>>>><<<<>>>><<>><<><<>>><<>>>><<>>><<>>><<<>>>><<>>><<><<>>><<<>><<<<>>><<>>><<<>>><<<>>><>>>><<<>>>><<<<>>>><>>>><<<>>>><<<>>>><>>>><>>>><<<><<>><><>><<>><><<<>>>><><>>>><><<<><>>><<<>>><<<>>><<<<>><<<<><<<>>><<>><<<<>>><<<>><<>>>><<><<<<>>><>><<<>>>><<>><<<<>>><<<<>>><>>>><<><<<>><<<<>>>><<>>>><<<<><<>><<>>><>>><><<<<>><<><<<>>>><<<<>>>><<<>>><<>>><><><<<<>>>><<>><><<<<><<<<>>>><<>>>><><<<><>>><>>>><<<><<<<>><<<<>>>><<<><<>><>>>><<>>>><<>>><<<><<<><<<<><<<<>><<<<><<<>>><><<<>>><<<>>>><<><<<<>>><>><<><<><>>><<>>><<<<>>>><<>>>><><<<<>>>><<><<<>>><<<><<<<><<<<>><<<>><><<>><<<<><<<><><<<>>><>>>><<<<>>>><<>>><<>>>><<>>>><<<<>><<<>><<>>>><>><>><<>>><<<<><>>><<<>>><<<<>>>><<>><>>>><<><<<<><<>>>><<<>><>>>><<>><>><<<<><<<<>>><>>>><><<<<>><<<>>><><<><>>>><<>>><<<<>>><>>>><<<<>>>><><>><>><<<>><<>><<<><>>>><><<<<>>><<><<<>>>><<<>><<>>><<<>><<<>>>><<>>>><>><><<>>><<>><>>><<<><<<>>>><<<<><<>>><<<>>>><<<<><<<<>>>><>><<<>><<><>>>><><<>>>><<><<<<>><<>>><<><<<>>>><>><<<>><<>>><<>><>>><<<>>><<<<>>><<<<>>>><<<>>>><<<><<>><>><<>>><>>><<>>>><<>>><<<<>>><>>>><<<<>><<<<>>>><<<<><<<>>><>>><<<><<<<><<<>>>><>>><>>>><<>>>><<>>>><<<>>>><><<<>><<>>>><<<><<>><<>>><<>>><<<>><<<><<><<>>>><>>>><<<<><<>>>><<><<<<><>>><<>><<>>><<>>>><<<><>>><<>>><<>>><<>><<<>><<>><<<<>>>><<><<<>>>><<<<>>>><<<>>><><>>><<>>><<>><<<<>>><<><>>>><<<<>>><<>>><<<><>>><>>><<<>>><<<<><<<>>>><<<>>>><<<>><<<<>>>><<<<>>>><<>>><<<<>>>><>>>><<<>>><<<<>>>><<><<<>><<<>>><<<>>><<>>><<<<><>>><<<>>>><<>>>><<<>>>><>><<<<><<<<>><<>>>><<<<>>><>><<<>><<<<><<>>>><<<<>>><<<>>><>><<><<<>>>><<<<>>>><<<<>><<<<>>>><<<<>>><<>>><<<>>>><>>><<<<>><<<<>>>><>>>><<<<><<>>><<<><<>>>><>>><<<>>>><<>>>><<>>><<<<><<<<><<>>>><<>>>><><<<<><>><<<<>>>><<<>><<>><<>>>><<><<<><<<<><<<<>>><><<><<<<>><<>>>><<<<>>>><<<<>>>><<>>>><<<>>>><<>>><<<>>>><<<><<>><>>>><><>><>><<<<>>><<<<><<<>>>><<>>><<<>><><<>><<<<>>>><<<><<<>><<<<>>><<<<>><<>><<>>>><<>>>><>>>><>>><<><<>>>><<<>><><<>>>><<<>>><<>>><<<>>><>>><<<<>><<<<><<<>><<>>>><<<>>><>>><<<<>><<<<>>>><<<<>><<<<><<<<><>>>><><<>>>><>>><<<<>>><<<<>>><>>>><<<><<>>><>>>><><<<<><>>>><>><<<><<>>><<><<<<>>><<<<>>><<<>>><<<>>><<>>>><<>>>><<<>><<<><<>>>><<<<>>><>>><<<><<<><>>><<><<>>>><>>>><<<<>><><<>>>><>><<<>>><>><<<<>>>><<<>>>><<<><><<<>>>><<>><<<>>>><<<><<>>><<>>><>>>><<>><<<<>>>><<>><>><<<>>>><>><<<<><<>><>>>><<<<>>>><<><<<>>>><<>>><<<>>><<<>><>>><<<>>><<<><<<>><<<<>>><<<<>><<>>>><>>><<<<>>><<<<>>><>>>><<<<><<>><<<<><><<<<><<<<>><<<<>>><<>>><>><<><<>>>><><<<><<<<><<<>>><>>>><<<<>>><>>>><>>>><<<<>>><<><>>>><<<<>><<<>>><<>>><<<<>>>><>>>><>>><<>><<<>><<<<>>>><<<<>><>>>><<>>><<<><>>>><<<>>><<<><>>>><<<<>><>><<<>>>><>>>><>>><<><<>>>><<>>><<<<>><<<>>><<>>>><<<>>>><<>>>><<<>>><<>><>>><>>>><<>>>><<<<>><<<><>>><<<>>>><<>><<>><>><<>><>>>><>>><<<>>><>><>><<<><>><<<<>>><<<>>>><<<<><<<<><<><<><<<>>><<<><<>><<>><<<>>>><<>>><<>><<<<>><<>><<<<>><>>><<<>>><<>>>><<>>>><<<<><<>><<<<>><<<<><>><<<<><<<<><<<<>>><<<<>><<<<><<<>><>>><>>><<<<>>>><<<<>><<<<>><><<<>><>>><<><<><<<<>>><<>>>><<<<><<<<>><<>><>><<<>>>><<>>><<<<><>>>><<<<>>><<<>>>><<<>>><<<<>><<<<>>><<>>>><><<<<>>><<<<>><<>><<<><><<<><<<><<>>>><<><<<><<>><<<><<<<>>><<<>>><<<<><<>>><<<><<<>>>><><<>>>><<<<><<<<><<<>>><<>>><<<<>>>><<<><>>><<>><<>><<<<>>><<<<><>>><>>><<>>>><><<<<>><><<<<>>><<>><<<<>>>><<<<>><>>>><>><<<<>>>><<>>><<<>>>><<<>><><<>><<<>>><<<>>>><>>>><<<<>><<>><<<>>><<<>>>><<<>>><<<<><<>>>><<<<>><<><<>>>><<<><>>>><<<>>>><>>>><<>>>><<<><<<><<<<>><>>>><<<<>>><><<>><>>><>>><<<>>>><<><>><>><><<<><>><<>><<<<>>><<<>><<<><<>><<<>>>><<<>>><<<<>>><<<>>>><<<>>><<<<>><<<>><>><<<<>>><<<<><<>>><<<<>>><<<>>><>><<><>>><>>>><<<>><<>>><<>>>><<<>>>><>><<><>>>><<<<><<<<><>><<<<>>><<<>>><<<>>><<<<>><<<<>><<<>><>><<>><<<>><<>>><>><<<<>><>><>><<><>><<>>><<><>><>><>><<>>><<<><<><><<>>><<>>>><><<>>><>>>><<<>>><<>>><<<<>>>><>>><<>>>><<><<<>>>><<<<>><>>>><<<<>>>><<<>>>><>>>><<>>><>>>><><><<<><<<<>><>>><<<<><>>>><<<<>>><<<>><<<<><<<<><<<>>>><<>>>><<<><<<>><<>><<<><<>>><<<>>><><<<>>>><<>><<>><>>><<<<>>>><<<<>><>><<<<>>><<<<>>><><<<>>>><<<>>><<<<>><<<><<<<>><<<>>><<<<>><<<>>>><>>><<><<>>>><<<>><<<<>>>><<<>>>><<<<>><<>>>><>>><<<>><<<><<<<><<<>>>><<<<><<>>>><<<<>><<<<>>><>><<<>><<<<>>><>><<><<>>><<<>><<<<>>><><<<>>><<<>>>><<<<>><<>>>><>>><<<<>><<<><>><<<<>>>><<<>><<<><<<>>>><<<>>>><<<<><><>>><<<>><<<<>>>><<<>>>><>><<>><>><>><<<<>>>><<<<>><>><<<<>>>><<<>>><<>>>><<>>><<>><<>>>><<<>>><<>>>><<<>>>><>><<<<>>><<>>>><><<<>>><<<<><>>><>>><<>>>><<>>>><<<>>>><<>>><<<>>>><>>><<><<>>>><<<>><<>><<<><<<<><<<<>>>><<>><>>>><<>>>><>><<><><<><>>><>>>><<<>>><<<>>><<><<<>>>><<>>>><<<<><><>><<>>><<<<>><<<<>>>><>>><<<<>>><<<><<><<>><<>>><<<><<<<>>>><<>><<<>><<<<>>><<<>><<<<><<<>>>><>>><<>>>><<<>>>><<<><>>>><>>><>><<>>><<>>><<<<><>>>><<>>>><<<<><<><<<<>><<><<<>>>><<<<>><<><<<<>>><>><>>>><<<>>>><>><>>>><<<>>><<><<<<>>>><>>>><>>>><<<>><<>>><<<>>><<<><>><<><<<<><<<<>>>><<<<>><<<<><<<><<<<>>>><>>><<<>><<<<><>>><>><<>>><<>><<>><<<>>><><>><<<>>><><<>>><<<<>>><<<<><>><<<>><<<<>><<<<><<<>>><<<<>>>><><<>>><<<>><<><<>><<>>>><<<<><>>>><<>>><>><<<<>><<<<>>><<>>><<<>>><>><<<><<<>><<<>>>><><>>><<<<>>>><<><>>><<>>>><<<<>><<<<>><<<<><<>>><<>>>><<<><<>>><><<<>>><<<<>><><>>>><<<>>>><<>>>><<>>>><<<<>>><<<<>>>><<<><<<<>>><>>><><>><>>><<>>>><>>><<>>>><>>>><><>>><>>><<<<>><<<<>>><<<<><<<<>>><><>>>><<>><<<<>>><<<>>>><<<>><<<>>><<<>>><<<<><><<<<>>>><<<>>>><<><<<>>><<<>>><>><<><>><<<<>>><>>><<<>><><<<>><<<<>>><>><<<<>>><<>><<<>><<<>>>><<<>><<<>>><<>><>><>>><>>>><<<>>><<<<><<<>>>><<<<>><<<>><<<<>>>><<><<<>><<>>>><<<<><<>>><<<<>><>>>><>>>><<<>>>><>>><<<<>><<>>>><>>>><<<>>><<>>><<<<><<<<>><<><<<>>>><<<<>><<>>><>><><<>>><<<<>><<<<>>>><>>>><<>><<><<<<><<<<>><>><<<>><>><><<<<>>>><<<<><<<<><<<>>><>>><>>><<>><<>>>><<>>><<<>><<<<>>><>><>>><>>><>>><<<<>><><<<<>><<>>><<>>><<<<>>>><<<<>>>><>>><>>><>>>><<<>>>><<<>>><>>><<>>>><<<<><<<<>>><<<>>>><<<>>>><>>><<<<>><<<>><>>>><<>>>><<<<>>><<<<>>>><<<>>>><<<>><<>><<<>><<<>><<<<>>><<<<>>><<<<><<<>><<><><<<<>><<<<><<<>>><<<<>>>><>>>><>>><<>><><<<<>><<<<>><><>>>><<<<>>><<>><<>>>><>>><<<><<>>>><<<<>><<<>>>><<<>>><<<<>>><<>>><<<<><<<<>>><<>><<>>><>>>><<<><<><>>><>>>><<<<>>>><<<<>>><<<><><<<>>>><><<<<>>>><<<<>>>><<><<<<>>><><<>>>><<<>>>><<><<>>><<>>><<>>><<<<>>>><<<<><<<<>>>><>>>><>><<>><><<<><<>>>><<>>>><><<<<>><<>>>><<><<<><>>>><<<<>><<<>>>><<<>><>>><<<<>>><<<<>>><>><<>><><<<<>><<>><<<<>><>>>><>>><<<><<<<>><<<<><>><<<>><<<<>"));
+
+day.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day17\\example17.txt", true);
+day.Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day17\\input17.txt", false);
 
 class Day17
 {
-    public object PartOne(string input)
+    // For Testing
+    long ExampleAnswer1 = 3068;
+    long ExampleAnswer2 = 1514285714288;
+
+    public void Run(string inputPath, bool isTest)
     {
-        return new Tunnel(input, 100).AddRocks(2022).Height;
+        string input = File.ReadAllText(inputPath);
+
+        var ans1 = new Tunnel(input, 100).AddRocks(2022).Height;
+        var ans2 = new Tunnel(input, 100).AddRocks(1000000000000).Height;
+
+        WriteAnswer(1, ans1, ExampleAnswer1, isTest);
+        WriteAnswer(2, ans2, ExampleAnswer2, isTest);
     }
 
-    public object PartTwo(string input)
+    private void WriteAnswer<T>(int number, T val, T supposedval, bool isTest)
     {
-        return new Tunnel(input, 100).AddRocks(1000000000000).Height;
+        // Convert the values to strings for output
+        string v = val?.ToString() ?? "(null)";
+        string sv = supposedval?.ToString() ?? "(null)";
+
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write("Answer Part " + number + ": ");
+        if (isTest)
+        {
+            // If this is a test, compare the actual and supposed values
+            if (v == sv)
+            {
+                // If they match, output in green
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(v);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(" ... supposed (example) answer: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(sv);
+            }
+            else
+            {
+                // If they don't match, output in white
+                Console.Write(v);
+                Console.Write(" ... supposed (example) answer: ");
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(sv);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+        else
+        {
+            // If this is not a test, just output the answer
+            Console.WriteLine(v);
+        }
+        Console.ForegroundColor = ConsoleColor.White;
     }
 
     class Tunnel
     {
-        int linesToStore;
+        int linesStored;
 
-        List<string> lines = new List<string>();
+        List<string> screenLines = new List<string>();
         long linesNotStored;
 
-        public long Height => lines.Count + linesNotStored;
+        string[][] rockShapes;
+        string jetMovement;
+        customCnt rockCounter;
+        customCnt jetCounter;
 
-        string[][] rocks;
-        string jets;
-        ModCounter irock;
-        ModCounter ijet;
-
-        // Simulation runs so that only the top N lines are kept in the tunnel. 
-        // This is a practical constant, there is NO THEORY BEHIND it.
-        public Tunnel(string jets, int linesToStore)
+        public Tunnel(string jetMovement, int linesStored)
         {
-            this.linesToStore = linesToStore;
-            rocks = new string[][]{
+            // Initialize member variables
+            this.linesStored = linesStored;
+            rockShapes = new string[][]{
                 new []{"####"},
                 new []{" # ", "###", " # "},
                 new []{"  #", "  #", "###"},
                 new []{"#", "#", "#", "#"},
                 new []{"##", "##"}
             };
-            this.irock = new ModCounter(0, rocks.Length);
-
-            this.jets = jets;
-            this.ijet = new ModCounter(0, jets.Length);
+            rockCounter = new customCnt(0, rockShapes.Length);
+            this.jetMovement = jetMovement;
+            jetCounter = new customCnt(0, jetMovement.Length);
         }
 
-        public Tunnel AddRocks(long rocksToAdd)
+        // Declare and implement the Height property
+        public long Height => screenLines.Count + linesNotStored;
+
+        public Tunnel AddRocks(long numRocksToAdd)
         {
-            // We are adding rocks one by one until we find a recurring pattern.
+            // Create a dictionary to store previously seen tunnel configurations
+            Dictionary<string, (long numRocksToAdd, long height)> seenConfigurations = new Dictionary<string, (long, long)>();
 
-            // Then we can jump forward full periods with just increasing the height 
-            // of the cave: the top of the cave should look the same after a full period
-            // so no need to simulate he rocks anymore. 
-
-            // Then we just add the remaining rocks. 
-
-            var seen = new Dictionary<string, (long rocksToAdd, long height)>();
-            while (rocksToAdd > 0)
+            // Loop until all the rocks have been added
+            while (numRocksToAdd > 0)
             {
-                var hash = string.Join("\n", lines);
-                if (seen.TryGetValue(hash, out var cache))
-                {
-                    // we have seen this pattern.
-                    // compute length of the period, and how much does it
-                    // add to the height of the cave:
-                    var heightOfPeriod = this.Height - cache.height;
-                    var periodLength = cache.rocksToAdd - rocksToAdd;
+                // Generate a hash of the current tunnel configuration
+                string configurationHash = string.Join("\n", screenLines);
 
-                    // advance forwad as much as possible
-                    linesNotStored += (rocksToAdd / periodLength) * heightOfPeriod;
-                    rocksToAdd = rocksToAdd % periodLength;
+                // Check if the current configuration has been seen before
+                if (seenConfigurations.TryGetValue(configurationHash, out var cache))
+                {
+                    // Calculate the height of one period of the repeating pattern
+                    long periodHeight = this.Height - cache.height;
+
+                    // Calculate the length of one period of the repeating pattern
+                    long periodLength = cache.numRocksToAdd - numRocksToAdd;
+
+                    // Calculate the number of periods that can fit into the remaining number of rocks
+                    long numPeriods = numRocksToAdd / periodLength;
+
+                    // Add the height of the periods to the total height of the tunnel
+                    linesNotStored += numPeriods * periodHeight;
+
+                    // Update the number of rocks remaining to add
+                    numRocksToAdd = numRocksToAdd % periodLength;
+
+                    // Exit the loop
                     break;
                 }
                 else
                 {
-                    seen[hash] = (rocksToAdd, this.Height);
+                    // Add the current configuration to the dictionary
+                    seenConfigurations[configurationHash] = (numRocksToAdd, this.Height);
+
+                    // Add a new rock to the tunnel
                     this.AddRock();
-                    rocksToAdd--;
+
+                    // Decrement the number of rocks remaining to add
+                    numRocksToAdd--;
                 }
             }
 
-            while (rocksToAdd > 0)
+            // Add any remaining rocks to the tunnel
+            while (numRocksToAdd > 0)
             {
                 this.AddRock();
-                rocksToAdd--;
+                numRocksToAdd--;
             }
+
             return this;
         }
 
         public Tunnel AddRock()
         {
-            // Adds one rock to the cave
-            var rock = rocks[(int)irock++];
+            // Get the next rock in the rock array
+            string[] rockShape = rockShapes[(int)rockCounter++];
 
-            // make room of 3 lines + the height of the rock
-            for (var i = 0; i < rock.Length + 3; i++)
+            // Add blank lines to the top of the screen to make room for the new rock
+            for (int i = 0; i < rockShape.Length + 3; i++)
             {
-                lines.Insert(0, "|       |");
+                screenLines.Insert(0, "|       |");
             }
 
-            // simulate falling
-            var (rockX, rockY) = (3, 0);
+            // Declare and initialize variables
+            int rockXPosition = 3;
+            int rockYPosition = 0;
+            int jetIndex = 0;
+
+            // Loop until the rock reaches the bottom of the screen or a collision occurs
             while (true)
             {
-                var jet = jets[(int)ijet++];
-                if (jet == '>' && !Hit(rock, rockX + 1, rockY))
+                // Get the next jet character
+                char jetDirection = this.jetMovement[(int)jetCounter++];
+
+                // Move the rock in the specified direction if there is no collision
+                if (jetDirection == '>' && !Hit(rockShape, rockXPosition + 1, rockYPosition))
                 {
-                    rockX++;
+                    rockXPosition++;
                 }
-                else if (jet == '<' && !Hit(rock, rockX - 1, rockY))
+                else if (jetDirection == '<' && !Hit(rockShape, rockXPosition - 1, rockYPosition))
                 {
-                    rockX--;
+                    rockXPosition--;
                 }
-                if (Hit(rock, rockX, rockY + 1))
+
+                // Check if the rock has reached the bottom of the screen or collided with another object
+                if (Hit(rockShape, rockXPosition, rockYPosition + 1))
                 {
                     break;
                 }
-                rockY++;
+
+                // Increment the rock's vertical position
+                rockYPosition++;
             }
 
-            Draw(rock, rockX, rockY);
+            // Draw the rock on the screen
+            Draw(rockShape, rockXPosition, rockYPosition);
+
             return this;
         }
 
-        bool Hit(string[] rock, int rockX, int rockY)
+        bool Hit(string[] rockArray, int rockXPosition, int rockYPosition)
         {
-            // tells if a rock can be placed in the given location or hits something
-            if (rock.Length + rockY > lines.Count)
+            // Check if the rock will go off the bottom of the screen
+            if (rockArray.Length + rockYPosition > screenLines.Count)
             {
                 return true;
             }
 
-            var (crow, ccol) = (rock.Length, rock[0].Length);
-            for (var irow = 0; irow < crow; irow++)
+            // Declare and initialize variables
+            int numRowsInRock = rockArray.Length;
+            int numColsInRock = rockArray[0].Length;
+            int rockStartCol = rockXPosition;
+            int rockStartRow = rockYPosition;
+
+            // Iterate over the rows and columns of the rock array
+            foreach (var rockRow in rockArray)
             {
-                for (var icol = 0; icol < ccol; icol++)
+                foreach (var rockElement in rockRow)
                 {
-                    if (rock[irow][icol] == '#' && lines[irow + rockY][icol + rockX] != ' ')
+                    // Check if the current element is a '#' character
+                    if (rockElement == '#')
                     {
-                        return true;
+                        // Check if there is an object at the current position on the screen
+                        if (screenLines[rockStartRow][rockStartCol] != ' ')
+                        {
+                            return true;
+                        }
                     }
+
+                    // Increment the column position for the next iteration
+                    rockStartCol++;
                 }
+
+                // Reset the column position and increment the row position for the next iteration
+                rockStartCol = rockXPosition;
+                rockStartRow++;
             }
+
             return false;
         }
 
-        void Draw(string[] rock, int rockX, int rockY)
+        void Draw(string[] rockArray, int rockXPosition, int rockYPosition)
         {
-            // draws a rock pattern into the cave at the given x,y coordinates,
+            // Declare and initialize variables
+            int numRowsInRock = rockArray.Length;
+            int numColsInRock = rockArray[0].Length;
+            int rockStartCol = rockXPosition;
+            int rockStartRow = rockYPosition;
 
-            var (crow, ccol) = (rock.Length, rock[0].Length);
-            for (var irow = 0; irow < crow; irow++)
+            // Iterate over the rows and columns of the rock array
+            foreach (var rockRow in rockArray)
             {
-                var chars = lines[irow + rockY].ToArray();
-                for (var icol = 0; icol < ccol; icol++)
+                foreach (var rockElement in rockRow)
                 {
-
-                    if (rock[irow][icol] == '#')
+                    // Check if the current element is a '#' character
+                    if (rockElement == '#')
                     {
-                        if (chars[icol + rockX] != ' ')
+                        // Get the current line of text from the screen
+                        char[] screenChars = screenLines[rockStartRow].ToArray();
+
+                        // Check if there is already an object at the current position on the screen
+                        if (screenChars[rockStartCol] != ' ')
                         {
-                            throw new Exception();
+                            // Throw an exception if there is an object in the way
+                            throw new Exception("Collision detected!");
                         }
-                        chars[icol + rockX] = '#';
+
+                        // Add the rock element to the screen at the current position
+                        screenChars[rockStartCol] = rockElement;
+
+                        // Convert the modified screen line back to a string and update the screen lines list
+                        screenLines[rockStartRow] = string.Join("", screenChars);
                     }
+
+                    // Increment the column position for the next iteration
+                    rockStartCol++;
                 }
-                lines[rockY + irow] = string.Join("", chars);
+
+                // Reset the column position and increment the row position for the next iteration
+                rockStartCol = rockXPosition;
+                rockStartRow++;
             }
 
-            // remove empty lines from the top
-            while (!lines[0].Contains('#'))
+            // Remove any lines at the top of the screen that do not contain a '#' character
+            while (!screenLines[0].Contains('#'))
             {
-                lines.RemoveAt(0);
+                screenLines.RemoveAt(0);
             }
 
-            // keep the tail
-            if (lines.Count > linesToStore)
+            // Check if the number of lines in the screen exceeds the maximum number of lines stored
+            if (screenLines.Count > linesStored)
             {
-                var r = lines.Count - linesToStore;
-                lines.RemoveRange(linesToStore, r);
-                linesNotStored += r;
+                // Remove any excess lines from the bottom of the screen
+                int numLinesToRemove = screenLines.Count - linesStored;
+                screenLines.RemoveRange(linesStored, numLinesToRemove);
+                linesNotStored += numLinesToRemove;
             }
-        }
-
-        char Get(IList<IList<char>> c, int x, int y)
-        {
-            return ' ';
         }
     }
 
-    record struct ModCounter(int index, int mod)
+    public record struct customCnt
     {
-        public static explicit operator int(ModCounter c) => c.index;
-        public static ModCounter operator ++(ModCounter c) =>
-            c with { index = c.index == c.mod - 1 ? 0 : c.index + 1 };
+        public int Index { get; private set; }
+        public int Mod { get; }
+
+        public customCnt(int index, int mod)
+        {
+            Index = index;
+            Mod = mod;
+        }
+
+        public static explicit operator int(customCnt c) => c.Index;
+        public static customCnt operator ++(customCnt c) =>
+            c with { Index = c.Index == c.Mod - 1 ? 0 : c.Index + 1 };
     }
 }
