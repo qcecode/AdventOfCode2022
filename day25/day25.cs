@@ -5,19 +5,19 @@ Run("C:\\Users\\henri\\source\\repos\\qcecode\\AdventOfCode2022\\day25\\input25.
 
 void Run(string path, bool isTest)
 {
-    string ExampleAnswer1 = "2=-1=0";
-    //string ExampleAnswer2 = "";
+    // For Testing
+    string exampleAnswer1 = "2=-1=0";
 
     var input = File.ReadAllLines(path).ToList();
-    var numbers = new List<Int64>();
+    var numbers = new List<long>();
 
     Process(input, numbers);
 
     var result = numbers.Sum();
     var resultToPrint = result;
-    var SNAFUResult = "";
+    var snafuResult = "";
 
-    while (result > 0)
+    for (int i = 0; result > 0; i++)
     {
         var number = result % 5;
         result /= 5;
@@ -25,55 +25,67 @@ void Run(string path, bool isTest)
         switch (number)
         {
             case 0:
-                SNAFUResult = "0" + SNAFUResult;
+                snafuResult = "0" + snafuResult;
                 break;
             case 1:
-                SNAFUResult = "1" + SNAFUResult;
+                snafuResult = "1" + snafuResult;
                 break;
             case 2:
-                SNAFUResult = "2" + SNAFUResult;
+                snafuResult = "2" + snafuResult;
                 break;
             case 3:
-                SNAFUResult = "=" + SNAFUResult;
+                snafuResult = "=" + snafuResult;
                 result++;
                 break;
             case 4:
-                SNAFUResult = "-" + SNAFUResult;
+                snafuResult = "-" + snafuResult;
                 result++;
                 break;
             default:
-                throw new Exception();
+                throw new Exception("Invalid number.");
         }
     }
-    Console.WriteLine($"Fuel requirements sum: {resultToPrint} | SNAFU sum: {SNAFUResult}");
-    WriteAnswer(1, SNAFUResult, ExampleAnswer1, isTest);
-    Console.WriteLine();
+    WriteAnswer(1, snafuResult, exampleAnswer1, isTest);
 }
 
+// Extract the logic for calculating the multiplier and the logic for updating the number variable into separate helper functions
 static void Process(List<string> input, List<long> numbers)
 {
     for (int i = 0; i < input.Count; i++)
     {
-        var numberString = input[i].Reverse();
-        Int64 number = 0;
-
-        for (int j = numberString.Count() - 1; j >= 0; j--)
+        long number = 0;
+        for (int j = 0; j < input[i].Length; j++)
         {
-            var multiplier = (Int64)Math.Pow(5, j);
-
-            if (numberString.ElementAt(j) == '=')
-                number += multiplier * (-2);
-            else if (numberString.ElementAt(j) == '-')
-                number += multiplier * (-1);
-            else
-            {
-                var value = (Int64)Char.GetNumericValue(numberString.ElementAt(j));
-                number += multiplier * value;
-            }
+            var multiplier = CalculateMultiplier(input[i].Length, j);
+            number = UpdateNumber(input[i][j], multiplier, number);
         }
-
         numbers.Add(number);
     }
+}
+
+// Helper function to calculate the multiplier
+static long CalculateMultiplier(int length, int j)
+{
+    return (long)Math.Pow(5, length - 1 - j);
+}
+
+// Helper function to update the number variable
+static long UpdateNumber(char c, long multiplier, long number)
+{
+    switch (c)
+    {
+        case '=':
+            number += multiplier * (-2);
+            break;
+        case '-':
+            number += multiplier * (-1);
+            break;
+        default:
+            var value = (long)Char.GetNumericValue(c);
+            number += multiplier * value;
+            break;
+    }
+    return number;
 }
 
 static void WriteAnswer<T>(int number, T val, T supposedval, bool isTest)
